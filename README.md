@@ -1,3 +1,3 @@
 #BISU ChatApp
 
-Chatting app exclusive for BISU MAIN's peps.
+Chatting app exclusive for BISU MAIN's students & educators.
