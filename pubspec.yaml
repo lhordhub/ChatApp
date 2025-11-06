@@ -63,6 +63,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/circular_logo.png
+    - assets/images/background.png
   fonts:
   - family: Poppins
     fonts:
