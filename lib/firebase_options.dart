@@ -41,46 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDGDV6f5YOQOVAl045P4SJb8uoJAOROK5o',
-    appId: '1:82105313297:web:7024b2e912c0e67d0d29b0',
-    messagingSenderId: '82105313297',
-    projectId: 'chatapp-im155u',
-    authDomain: 'chatapp-im155u.firebaseapp.com',
-    storageBucket: 'chatapp-im155u.firebasestorage.app',
+    apiKey: 'AIzaSyDFG1DGqnITna9XtWRDpJE7h-D0Fs37zC0',
+    appId: '1:584376772611:web:c8bd0a1686102566f4c636',
+    messagingSenderId: '584376772611',
+    projectId: 'bisuchat-1',
+    authDomain: 'bisuchat-1.firebaseapp.com',
+    storageBucket: 'bisuchat-1.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDNAZVUiT5Uv0V80cDg1AHpR2svzvMZ3is',
-    appId: '1:82105313297:android:d727ca4eb93e672e0d29b0',
-    messagingSenderId: '82105313297',
-    projectId: 'chatapp-im155u',
-    storageBucket: 'chatapp-im155u.firebasestorage.app',
+    apiKey: 'AIzaSyCwOCdg2EUzPcMKPOeTzpEUpJPul25LPsY',
+    appId: '1:584376772611:android:bf2636311d1382f3f4c636',
+    messagingSenderId: '584376772611',
+    projectId: 'bisuchat-1',
+    storageBucket: 'bisuchat-1.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDm8b6e1tbtI2VDrm250n020BEG2RwwNeM',
-    appId: '1:82105313297:ios:b36b9e74c37dbca30d29b0',
-    messagingSenderId: '82105313297',
-    projectId: 'chatapp-im155u',
-    storageBucket: 'chatapp-im155u.firebasestorage.app',
+    apiKey: 'AIzaSyA9-ZYwXIP1iIkMnmXJAmHitBw1NatKnkQ',
+    appId: '1:584376772611:ios:0438dd6ad797caf5f4c636',
+    messagingSenderId: '584376772611',
+    projectId: 'bisuchat-1',
+    storageBucket: 'bisuchat-1.firebasestorage.app',
     iosBundleId: 'com.example.simpleChatapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDm8b6e1tbtI2VDrm250n020BEG2RwwNeM',
-    appId: '1:82105313297:ios:b36b9e74c37dbca30d29b0',
-    messagingSenderId: '82105313297',
-    projectId: 'chatapp-im155u',
-    storageBucket: 'chatapp-im155u.firebasestorage.app',
+    apiKey: 'AIzaSyA9-ZYwXIP1iIkMnmXJAmHitBw1NatKnkQ',
+    appId: '1:584376772611:ios:0438dd6ad797caf5f4c636',
+    messagingSenderId: '584376772611',
+    projectId: 'bisuchat-1',
+    storageBucket: 'bisuchat-1.firebasestorage.app',
     iosBundleId: 'com.example.simpleChatapp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDGDV6f5YOQOVAl045P4SJb8uoJAOROK5o',
-    appId: '1:82105313297:web:81b4d1cefd9b24f70d29b0',
-    messagingSenderId: '82105313297',
-    projectId: 'chatapp-im155u',
-    authDomain: 'chatapp-im155u.firebaseapp.com',
-    storageBucket: 'chatapp-im155u.firebasestorage.app',
+    apiKey: 'AIzaSyDFG1DGqnITna9XtWRDpJE7h-D0Fs37zC0',
+    appId: '1:584376772611:web:de6b555c99a83034f4c636',
+    messagingSenderId: '584376772611',
+    projectId: 'bisuchat-1',
+    authDomain: 'bisuchat-1.firebaseapp.com',
+    storageBucket: 'bisuchat-1.firebasestorage.app',
   );
 }
