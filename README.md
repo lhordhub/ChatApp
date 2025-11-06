@@ -2,6 +2,6 @@
 
 Chatting App exclusive for BISU MAIN's students & educators.
 
-## Subheader
+## Statuss
 
 In progress...
