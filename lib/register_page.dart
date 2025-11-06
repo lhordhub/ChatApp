@@ -9,14 +9,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage>
-    with TickerProviderStateMixin {
-  final _auth = FirebaseAuth.instance;
+    with SingleTickerProviderStateMixin {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
-  late AnimationController _fadeController;
-  late AnimationController _slideController;
-
+  late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
 
@@ -24,45 +22,67 @@ class _RegisterPageState extends State<RegisterPage>
   void initState() {
     super.initState();
 
-    _fadeController = AnimationController(
+    _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 900),
     );
-    _fadeAnimation =
-        CurvedAnimation(parent: _fadeController, curve: Curves.easeIn);
 
-    _slideController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
+    _fadeAnimation = CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeIn,
     );
+
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.15),
+      begin: const Offset(0, 0.3),
       end: Offset.zero,
-    ).animate(CurvedAnimation(curve: Curves.easeOut, parent: _slideController));
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
 
-    _fadeController.forward();
-    _slideController.forward();
+    _animationController.forward();
   }
 
-  void registerUser() async {
-    if (!_emailController.text.trim().endsWith('@bisu.edu.ph')) {
+  Future<void> registerUser() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (!email.endsWith("@bisu.edu.ph")) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Only BISU email addresses are allowed')),
+        const SnackBar(
+          content: Text("Use your BISU email to proceed."),
+          duration: Duration(seconds: 3),
+        ),
       );
       return;
     }
 
-    try {
-      await _auth.createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
+    setState(() => _isLoading = true);
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Verification sent! Check your inbox.")));
+    try {
+      // ✅ Create user BUT do NOT send verification yet
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // ✅ Redirect to set_user.dart (user info input)
+      Navigator.pushReplacementNamed(context, "/setUser");
     } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("Error: ${e.message}")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? "Registration failed")),
+      );
     }
+
+    setState(() => _isLoading = false);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -70,7 +90,7 @@ class _RegisterPageState extends State<RegisterPage>
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient background
+          /// ✅ Aesthetic Gradient Background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -81,59 +101,127 @@ class _RegisterPageState extends State<RegisterPage>
             ),
           ),
 
-          Center(
+          /// ✅ Animated Content
+          SafeArea(
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: SlideTransition(
                 position: _slideAnimation,
-                child: Container(
-                  padding: const EdgeInsets.all(24),
-                  margin: const EdgeInsets.symmetric(horizontal: 30),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.10),
-                    borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white70, width: 1),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28.0,
+                    vertical: 20,
                   ),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Create Account",
+                        "Register",
                         style: TextStyle(
-                          fontSize: 32,
+                          fontFamily: "Poppins",
+                          fontSize: 42,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
-                          fontFamily: "Poppins",
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      const Text(
+                        "unsa pa imong gihulat? sign up na!",
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 18,
+                          color: Colors.white70,
+                        ),
+                      ),
+
+                      const SizedBox(height: 50),
+
+                      /// ✅ Email Input
                       TextField(
                         controller: _emailController,
                         style: const TextStyle(color: Colors.white),
-                        decoration: _inputStyle("BISU Email"),
+                        decoration: InputDecoration(
+                          labelText: "BISU Email",
+                          labelStyle: const TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Colors.white70),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Colors.white),
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 12),
+
+                      const SizedBox(height: 18),
+
+                      /// ✅ Password Input
                       TextField(
                         controller: _passwordController,
                         obscureText: true,
                         style: const TextStyle(color: Colors.white),
-                        decoration: _inputStyle("Set Password"),
-                      ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: registerUser,
-                          style: buttonStyle(),
-                          child: const Text("Sign Up"),
+                        decoration: InputDecoration(
+                          labelText: "Set Password",
+                          labelStyle: const TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Colors.white70),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(color: Colors.white),
+                          ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushReplacementNamed(context, '/login'),
-                        child: const Text(
-                          "Already have an account? Login",
-                          style: TextStyle(color: Colors.white70),
+
+                      const SizedBox(height: 35),
+
+                      /// ✅ Register Button
+                      SizedBox(
+                        width: double.infinity,
+                        height: 55,
+                        child: _isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              )
+                            : ElevatedButton(
+                                onPressed: registerUser,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                ),
+                                child: const Text(
+                                  "Register",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      Center(
+                        child: TextButton(
+                          onPressed: () => Navigator.pushReplacementNamed(
+                            context,
+                            "/login",
+                          ),
+                          child: const Text(
+                            "Already have an account? Login",
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white70,
+                              fontFamily: "Poppins",
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -143,32 +231,6 @@ class _RegisterPageState extends State<RegisterPage>
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  InputDecoration _inputStyle(String label) {
-    return InputDecoration(
-      labelText: label,
-      labelStyle: const TextStyle(color: Colors.white70),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: const BorderSide(color: Colors.white70),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(18),
-        borderSide: const BorderSide(color: Colors.white),
-      ),
-    );
-  }
-
-  ButtonStyle buttonStyle() {
-    return ElevatedButton.styleFrom(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      backgroundColor: Colors.white,
-      foregroundColor: Colors.black,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
       ),
     );
   }
