@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 import 'register_page.dart';
 import 'login_page.dart';
 import 'chat_page.dart';
+import 'welcome_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +22,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'BISU ChatApp',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/login',
+      initialRoute: '/welcome',
       routes: {
+        '/welcome': (context) => const WelcomePage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/chat': (context) => const ChatPage(),
